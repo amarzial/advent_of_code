@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div id="visual" style="display: grid; grid-template-columns: repeat(30, 1fr);">
+
+    </div>
+    <script>
+        (async () => {
+            let program = await fetch('input.txt');
+            program = await program.text();
+
+            class Visual {
+                constructor(container, program) {
+                    this.container = container;
+                    this.program = program;
+                    for (let instruction of program) {
+                        if (!instruction) { continue; }
+                        let elem = document.createElement('div');
+                        elem.innerHTML = `${instruction[0]}<br>${instruction[1]}`;
+                        elem.classList.add('block');
+                        this.container.append(elem);
+                    }
+                    this.current = null;
+                    this.previous = null;
+                }
+
+                activate(idx) {
+                    let elems = this.container.children;
+                    if (this.previous !== null) {
+                        elems[this.previous].classList.remove('is-previous-block');
+                    }
+                    this.previous = this.current;
+                    this.current = idx;
+                    if (this.previous !== null) {
+                        elems[this.previous].classList.remove('is-active-block');
+                        elems[this.previous].classList.add('is-previous-block');
+                        elems[this.previous].classList.add('is-visited-block');
+                    }
+                    elems[this.current].classList.add('is-active-block');
+                }
+            }
+
+            const instruction = {
+                jmp: function (prog, arg) { return parseInt(arg); },
+                nop: function (prog, arg) { return null; },
+                acc: function (prog, arg) {
+                    prog.register += arg;
+                    return null;
+                }
+            }
+
+            program = program
+                .split('\n').map((l) => {
+                    if (!l) { return null; }
+                    let [_, cmd, arg] = l.match(/(\w+) ((\+|\-)\d+)/);
+                    return [cmd, arg];
+                });
+            const display = new Visual(document.getElementById('visual'), program);
+
+            async function run(replace = null) {
+                const lines = program.map(l => { return { line: l, count: 0 }; });
+                let prog = { register: 0 };
+                let ip = 0;
+                let stop = false;
+                while (!stop) {
+                    if (ip < 0 || ip >= program.length - 1) {
+                        return [true, prog.register];
+                    }
+                    display.activate(ip);
+                    await new Promise((resolve, reject) => { setTimeout(resolve, 50) });
+                    let line = lines[ip];
+                    line.count++;
+                    if (line.count > 1) {
+                        return [false, prog.register];
+                    }
+                    // console.log(program.length,ip, line);
+                    let [cmd, arg] = line.line;
+                    if (replace && replace[ip]) {
+                        cmd = replace[ip];
+                    }
+                    let next = instruction[cmd](prog, parseInt(arg));
+                    ip += (next === null) ? 1 : next;
+                }
+                console.log('done');
+            }
+            run();
+        })();
+
+    </script>
+    <style>
+        .block {
+            padding: 4px;
+            border: 1px solid black;
+            border-radius: 3px;
+            margin: 2px;
+            font-size: 60%;
+        }
+
+        .is-active-block {
+            background: #98e384;
+        }
+
+        .is-visited-block {
+            background: #bcffec;
+        }
+
+        .is-previous-block {
+            background: #f56767;
+        }
+    </style>
+</body>
+
+</html>
