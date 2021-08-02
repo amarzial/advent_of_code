@@ -1,2 +1,8 @@
 website/*
 *.sublime*
+registry/
+
+# Added by cargo
+
+target/
+workspace.code-workspace
