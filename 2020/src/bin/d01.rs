@@ -9,7 +9,7 @@ fn main() {
     let filename = std::env::args()
         .nth(1)
         .unwrap_or(String::from("inputs/d01.txt"));
-    let list = utils::read_int_list(&filename);
+    let list = utils::read_list(&filename);
 
     //part 1
     let set: HashSet<u32> = HashSet::from_iter(list.clone().into_iter());

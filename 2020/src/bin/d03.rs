@@ -26,7 +26,7 @@ fn main() {
     let filename = std::env::args()
         .nth(1)
         .unwrap_or(String::from("inputs/d03.txt"));
-    let list = utils::read_list(&filename, |line| {
+    let list = utils::read_list_parse(&filename, |line| {
         return String::from(line).as_bytes().to_vec();
     });
 
