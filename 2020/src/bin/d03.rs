@@ -18,7 +18,6 @@ fn slide(forest: &Vec<Vec<u8>>, direction: &Point) -> u64 {
         position.y += direction.y;
     }
 
-    println!("{}", trees);
     return trees;
 }
 
