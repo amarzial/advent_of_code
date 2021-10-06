@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use aoc2020::utils;
 
 fn main() {
@@ -11,35 +9,35 @@ fn main() {
         .map(|s| s.parse().unwrap())
         .collect();
 
-    let mut numbers = HashMap::new();
+    let mut numbers = vec![0; 3e7 as usize];
 
-    let mut current = 0;
+    let mut current = 1;
     let mut next = 0;
     for n in input.iter() {
-        numbers.insert(*n, current);
+        numbers[*n as usize] = current;
         current += 1;
     }
 
-    while current < 2020 - 1 {
-        let first = !numbers.contains_key(&next);
+    while current < 2020 {
+        let first = numbers[next] == 0;
         let n = match first {
             true => 0,
-            false => current - numbers.get(&next).unwrap(),
+            false => current - numbers[next],
         };
-        numbers.insert(next, current);
+        numbers[next] = current;
         current += 1;
         next = n;
     }
 
     println!("Part 1: {}", next);
 
-    while current < 30000000 - 1 {
-        let first = !numbers.contains_key(&next);
+    while current < 30000000 {
+        let first = numbers[next] == 0;
         let n = match first {
             true => 0,
-            false => current - numbers.get(&next).unwrap(),
+            false => current - numbers[next],
         };
-        numbers.insert(next, current);
+        numbers[next] = current;
         current += 1;
         next = n;
     }
