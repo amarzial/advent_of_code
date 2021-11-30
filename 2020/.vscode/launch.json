@@ -44,15 +44,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'd01'",
+            "name": "Debug executable 'd14'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=d01",
+                    "--bin=d14",
                     "--package=aoc2020"
                 ],
                 "filter": {
-                    "name": "d01",
+                    "name": "d14",
                     "kind": "bin"
                 }
             },
