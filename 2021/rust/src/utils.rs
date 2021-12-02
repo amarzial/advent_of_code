@@ -1,5 +1,15 @@
 use std::io::BufRead;
 
+pub fn get_input() -> String {
+    match std::env::args().nth(1) {
+        Some(s) => s,
+        None => {
+            println!("Nome del file non specificato!\nUtilizzo:\n\tdXX <input>");
+            std::process::exit(1)
+        }
+    }
+}
+
 pub fn read_list<T: std::str::FromStr + std::fmt::Debug>(path: &str) -> Vec<T>
 where
     T: std::str::FromStr,
