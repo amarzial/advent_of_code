@@ -1,6 +1,6 @@
 from getinput import GetInput
 
-INPUT = GetInput('../input/02.txt')
+INPUT = open('../input/02.txt').readlines()
 
 horizon = depth = 0
 
