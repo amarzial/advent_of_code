@@ -13,13 +13,11 @@ class BingoBoard:
     def check_row(self):
         for n in range(0,21,5):
             if self.marked.issuperset(self.numbers[n:n+5]):
-                self.cinquina = self.numbers[n:n+5]
                 return True
 
     def check_column(self):
         for n in range(5):
             if self.marked.issuperset(self.numbers[n::5]):
-                self.cinquina = self.numbers[n::5]
                 return True
 
 
@@ -37,10 +35,11 @@ for n in numbers:
             if board.check_win():
                 last.add(board)
                 unmarked = sum(set(board.numbers) - board.marked)
-                if len(boards) == len(last):
-                    print("Part 2:", unmarked * n)
-                    exit()
 
                 if first == False:
                     print("Part 1:", unmarked * n)
                     first = True
+
+                if len(boards) == len(last):
+                    print("Part 2:", unmarked * n)
+                    exit()
