@@ -1,4 +1,3 @@
-from getinput import GetInput
 
 INPUT = open('../input/02.txt').readlines()
 

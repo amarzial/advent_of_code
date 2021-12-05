@@ -1,6 +1,5 @@
-from getinput import GetInput
 
-INPUT = GetInput('../input/01.txt')
+INPUT = open('../input/01.txt').read().splitlines()
 
 
 # Part1
