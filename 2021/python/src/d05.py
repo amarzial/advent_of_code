@@ -6,10 +6,8 @@ data = open('../input/05.txt', 'r').read().splitlines()
 def solve(part):
     grid = defaultdict(int)
 
-    for l in data:
-        l = l.split(' -> ')
-        x1, y1, x2, y2 = int(l[0].split(',')[0]), int(l[0].split(',')[1]), \
-                         int(l[1].split(',')[0]), int(l[1].split(',')[1])
+    for line in data:
+        x1, y1, x2, y2 = [int(x) for x in line.replace(' -> ', ',').split(',')]
 
         if y1 == y2:
             for k in range(min(x1, x2), max(x1, x2) + 1):
