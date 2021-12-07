@@ -39,3 +39,16 @@ pub fn read_list_parse<T>(path: &str, func: fn(&str) -> T) -> Vec<T> {
     }
     return list;
 }
+
+pub fn read_line<T>(path: &str, separator: &str) -> Vec<T>
+where
+    T: std::str::FromStr,
+    <T as std::str::FromStr>::Err: std::fmt::Debug,
+{
+    let input = std::fs::read_to_string(path).unwrap();
+    let data: Vec<T> = input[0..input.len() - 1]
+        .split(separator)
+        .map(|x| return x.parse().unwrap())
+        .collect();
+    return data;
+}
