@@ -28,8 +28,7 @@ def explore(y, x, visited=[]):
         return 0
     else: visited.append((y, x))
 
-    u = d = l = r = 0
-
+    u, d, l, r = 0, 0, 0, 0
     if y > 0:
         u = explore(y-1, x, visited)
     if x > 0:
