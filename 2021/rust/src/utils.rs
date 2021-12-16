@@ -4,8 +4,10 @@ pub fn get_input() -> String {
     match std::env::args().nth(1) {
         Some(s) => s,
         None => {
-            println!("Nome del file non specificato!\nUtilizzo:\n\tdXX <input>");
-            std::process::exit(1)
+            let mut file = String::from("input/");
+            file += std::env::args().nth(0).unwrap().split("/").last().unwrap();
+            file += ".txt";
+            file
         }
     }
 }
