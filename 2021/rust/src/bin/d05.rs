@@ -1,6 +1,6 @@
 use std::{collections::HashMap, hash::Hash};
 
-use aoc2021::utils;
+use aoc::utils;
 
 #[derive(Eq, Hash, Debug, Clone)]
 struct Point {

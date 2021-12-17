@@ -1,4 +1,4 @@
-use aoc2021::utils;
+use aoc::utils;
 
 fn calc_fuel(crabs: &Vec<i32>, target: i32) -> i32 {
     let mut fuel = 0;

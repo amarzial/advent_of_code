@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use aoc2021::utils;
+use aoc::utils;
 
 type Caves<'a> = HashMap<&'a str, Vec<&'a str>>;
 

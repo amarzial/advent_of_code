@@ -1,4 +1,4 @@
-use aoc2021::utils;
+use aoc::utils;
 
 fn main() {
     let filename = utils::get_input();

@@ -1,4 +1,4 @@
-use aoc2021::utils;
+use aoc::utils;
 
 enum Status {
     Complete,

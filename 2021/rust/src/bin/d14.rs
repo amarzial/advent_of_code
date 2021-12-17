@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc2021::utils;
+use aoc::utils;
 
 fn get_state(string: &String) -> HashMap<String, u64> {
     let mut state = HashMap::new();

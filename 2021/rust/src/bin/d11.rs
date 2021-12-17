@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 
-use aoc2021::utils;
+use aoc::utils;
 
 type Grid = Vec<Vec<u32>>;
 

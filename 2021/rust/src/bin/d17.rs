@@ -21,7 +21,7 @@ fn get_input(filename: &str) -> Target {
     out
 }
 
-use aoc2021::utils;
+use aoc::utils;
 
 fn run(initial: (i32, i32), target: Target) -> Option<i32> {
     let min_x = target.0 .0.min(target.0 .1);

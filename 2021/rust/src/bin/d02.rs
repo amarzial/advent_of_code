@@ -1,4 +1,4 @@
-use aoc2021::utils;
+use aoc::utils;
 enum Direction {
     Down(i32),
     Up(i32),

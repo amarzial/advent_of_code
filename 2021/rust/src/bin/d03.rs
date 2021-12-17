@@ -1,4 +1,4 @@
-use aoc2021::utils;
+use aoc::utils;
 
 fn ratings<'a>(list: impl Iterator<Item = &'a Box<String>>, length: usize) -> Vec<i32> {
     let mut bits = Vec::new();

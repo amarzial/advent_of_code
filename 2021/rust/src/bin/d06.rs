@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc2021::utils;
+use aoc::utils;
 
 fn run(fishes: &mut HashMap<i32, u64>) {
     for i in 0..=8 {

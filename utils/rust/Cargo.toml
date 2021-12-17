@@ -1,11 +1,8 @@
 [package]
-name = "aoc2021"
+name = "aoc"
 version = "0.1.0"
-authors = ["ale"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-aoc = { path = "../../utils/rust" }
-pathfinding = "3.0.5"

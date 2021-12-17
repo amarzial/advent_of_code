@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use aoc2021::utils;
+use aoc::utils;
 
 enum Fold {
     X(usize),

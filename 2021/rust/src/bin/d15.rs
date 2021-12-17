@@ -1,6 +1,4 @@
-use std::collections::HashSet;
-
-use aoc2021::utils;
+use aoc::utils;
 extern crate pathfinding;
 
 use pathfinding::prelude::astar;
@@ -29,22 +27,6 @@ impl Grid {
                 None => None,
             },
             None => None,
-        }
-    }
-
-    fn print_path(&self, path: &Vec<(i32, i32)>) {
-        let mut points: HashSet<(i32, i32)> = HashSet::new();
-        points.extend(path.into_iter());
-
-        for y in 0..self.height {
-            for x in 0..self.width {
-                if points.contains(&(x as i32, y as i32)) {
-                    print!("\x1b[31m{}\x1b[0m", self.get((x, y)).unwrap());
-                } else {
-                    print!("{}", self.get((x, y)).unwrap());
-                }
-            }
-            println!("");
         }
     }
 }

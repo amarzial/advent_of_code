@@ -1,6 +1,6 @@
 use std::io::Read;
 
-use aoc2021::utils;
+use aoc::utils;
 
 struct Stream {
     data: Vec<u8>,

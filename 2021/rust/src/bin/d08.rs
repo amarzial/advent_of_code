@@ -3,7 +3,7 @@ use std::{
     fmt::Debug,
 };
 
-use aoc2021::utils;
+use aoc::utils;
 
 #[derive(Debug)]
 struct Display {

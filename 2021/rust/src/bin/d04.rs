@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc2021::utils;
+use aoc::utils;
 
 struct Board {
     numbers: HashMap<u8, usize>,
