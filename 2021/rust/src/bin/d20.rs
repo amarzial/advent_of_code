@@ -7,7 +7,10 @@ type Mapping = HashMap<usize, char>;
 struct Grid {
     main: GridData,
     back: GridData,
+    main_next: GridData,
+    back_next: GridData,
     light: bool,
+    next: HashSet<(i32, i32)>,
 }
 
 impl Grid {
@@ -31,13 +34,16 @@ impl Grid {
             main: grid,
             back: GridData::new(),
             light: true,
+            next: HashSet::new(),
+            main_next: GridData::new(),
+            back_next: GridData::new(),
         }
     }
     fn run(&mut self, mapping: &Mapping) {
-        let mut next = HashSet::new();
+        self.next.clear();
 
-        let area = |p: (i32, i32)| -> Vec<(i32, i32)> {
-            vec![
+        let area = |p: (i32, i32)| -> [(i32, i32); 9] {
+            [
                 (p.0 - 1, p.1 - 1),
                 (p.0, p.1 - 1),
                 (p.0 + 1, p.1 - 1),
@@ -59,13 +65,13 @@ impl Grid {
 
         for pixel in base.keys() {
             for p in area(*pixel) {
-                next.insert(p);
+                self.next.insert(p);
             }
         }
 
-        let mut new_light: GridData = GridData::new();
-        let mut new_dark: GridData = GridData::new();
-        for pixel in next.iter() {
+        self.main_next.clear();
+        self.back_next.clear();
+        for pixel in self.next.iter() {
             let mut val = 0;
             for p in area(*pixel) {
                 val <<= 1;
@@ -75,17 +81,17 @@ impl Grid {
             }
 
             if mapping[&val] == '#' {
-                new_light.insert(*pixel, true);
+                self.main_next.insert(*pixel, true);
             } else {
-                new_dark.insert(*pixel, true);
+                self.back_next.insert(*pixel, true);
             }
         }
         if mapping[&0] == '#' {
             self.light = !self.light;
         } else {
         }
-        std::mem::swap(&mut self.main, &mut new_light);
-        std::mem::swap(&mut self.back, &mut new_dark);
+        std::mem::swap(&mut self.main, &mut self.main_next);
+        std::mem::swap(&mut self.back, &mut self.back_next);
     }
 }
 fn main() {
