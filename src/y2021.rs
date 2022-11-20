@@ -26,8 +26,8 @@ mod d25;
 
 use crate::day;
 
-pub fn run(day: u8, part: day::Part) -> Option<day::Day> {
-    let mut d = day::Day::new();
+pub fn run(day: u32, part: day::Part) -> Option<day::Day> {
+    let mut d = day::Day::new(2021, day);
     let success = match day {
         1 => d01::run(&mut d, part),
         2 => d02::run(&mut d, part),
