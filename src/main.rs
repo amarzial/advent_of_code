@@ -1,3 +1,9 @@
+use aoc::run;
+
 fn main() {
-    println!("Hello, world!");
+    for year in 2022..2022 {
+        for day in 1..25 {
+            let i = run(year, day);
+        }
+    }
 }
