@@ -20,6 +20,14 @@ impl Day {
                 .unwrap_or(String::from(""));
     }
 
+    pub fn set_part_1(&mut self, value: String) {
+        self.part1 = Some(value)
+    }
+
+    pub fn set_part_2(&mut self, value: String) {
+        self.part2 = Some(value)
+    }
+
     pub fn new(year: u32, day: u32) -> Day {
         let mut d = Day {
             year,

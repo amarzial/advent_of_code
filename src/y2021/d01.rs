@@ -22,7 +22,9 @@ pub fn run(d: &mut day::Day, _which: day::Part) -> bool {
         }
         last2 = s;
     }
-    d.part1 = Some(cnt.to_string());
-    d.part2 = Some(cnt2.to_string());
+
+    d.set_part_1(cnt.to_string());
+    d.set_part_1(cnt2.to_string());
+
     true
 }
