@@ -1,5 +1,4 @@
 use aoc::day::Day;
-use aoc::day::Part;
 use aoc::run;
 
 #[derive(Debug)]
@@ -65,7 +64,7 @@ fn main() {
 
     for year in years {
         for day in days.clone() {
-            match run(year, day, Part::Both) {
+            match run(year, day) {
                 Some(d) => {
                     display_result(&d);
                 }

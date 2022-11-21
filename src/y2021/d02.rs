@@ -23,7 +23,7 @@ fn parse_direction(line: &str) -> Direction {
     }
 }
 
-pub fn run(d: &mut day::Day, _which: day::Part) -> bool {
+pub fn run(d: &mut day::Day) -> bool {
     let directions: Vec<Direction> = utils::read_list_parse(&d.input, parse_direction);
 
     let mut x = 0;

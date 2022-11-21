@@ -1,7 +1,7 @@
 use crate::day;
 use crate::utils;
 
-pub fn run(d: &mut day::Day, _which: day::Part) -> bool {
+pub fn run(d: &mut day::Day) -> bool {
     let sonar: Vec<u32> = utils::read_list(&d.input);
 
     let mut last = *sonar.get(0).unwrap();
