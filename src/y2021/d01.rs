@@ -24,7 +24,7 @@ pub fn run(d: &mut day::Day) -> bool {
     }
 
     d.set_part_1(cnt.to_string());
-    d.set_part_1(cnt2.to_string());
+    d.set_part_2(cnt2.to_string());
 
     true
 }
