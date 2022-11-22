@@ -1,5 +1,6 @@
 pub mod day;
 pub mod utils;
+mod y2018;
 mod y2020;
 mod y2021;
 mod y2022;
@@ -10,6 +11,34 @@ pub fn run(year: u32, day: u32) -> Option<day::Day> {
     let mut d = day::Day::new(year, day);
     let now = Instant::now();
     let success = match year {
+        2018 => match day {
+            1 => y2018::d01::run(&mut d),
+            2 => y2018::d02::run(&mut d),
+            3 => y2018::d03::run(&mut d),
+            4 => y2018::d04::run(&mut d),
+            5 => y2018::d05::run(&mut d),
+            6 => y2018::d06::run(&mut d),
+            7 => y2018::d07::run(&mut d),
+            8 => y2018::d08::run(&mut d),
+            9 => y2018::d09::run(&mut d),
+            10 => y2018::d10::run(&mut d),
+            11 => y2018::d11::run(&mut d),
+            12 => y2018::d12::run(&mut d),
+            13 => y2018::d13::run(&mut d),
+            14 => y2018::d14::run(&mut d),
+            15 => y2018::d15::run(&mut d),
+            16 => y2018::d16::run(&mut d),
+            17 => y2018::d17::run(&mut d),
+            18 => y2018::d18::run(&mut d),
+            19 => y2018::d19::run(&mut d),
+            20 => y2018::d20::run(&mut d),
+            21 => y2018::d21::run(&mut d),
+            22 => y2018::d22::run(&mut d),
+            23 => y2018::d23::run(&mut d),
+            24 => y2018::d24::run(&mut d),
+            25 => y2018::d25::run(&mut d),
+            _ => false,
+        },
         2020 => match day {
             1 => y2020::d01::run(&mut d),
             2 => y2020::d02::run(&mut d),
