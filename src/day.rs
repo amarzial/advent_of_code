@@ -40,4 +40,29 @@ impl Day {
         d.load_input();
         d
     }
+
+    pub fn print_result(&self) {
+        let p1 = match &self.part1 {
+            Some(s) => s.to_owned(),
+            None => String::from(""),
+        };
+        let p2 = match &self.part2 {
+            Some(s) => s.to_owned(),
+            None => String::from(""),
+        };
+
+        if !self.part1.is_some() && !self.part2.is_some() {
+            print!("Year {}, Day {}: Missing\n", self.year, self.day);
+        } else {
+            print!(
+                "Year {}, Day {}: {}.{:06}s\n  part 1: {}\n  part 2: {}\n",
+                self.year,
+                self.day,
+                self.time.as_secs(),
+                self.time.subsec_micros(),
+                p1,
+                p2
+            );
+        }
+    }
 }
