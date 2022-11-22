@@ -65,4 +65,15 @@ impl Day {
             );
         }
     }
+
+    pub fn stars(&self) -> i32 {
+        let mut s = 0;
+        if self.part1.is_some() {
+            s += 1;
+        }
+        if self.part2.is_some() {
+            s += 1;
+        }
+        s
+    }
 }

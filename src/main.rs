@@ -37,13 +37,16 @@ fn main() {
     };
 
     for year in years {
+        let mut stars = 0;
         for day in days.clone() {
             match run(year, day) {
                 Some(d) => {
                     d.print_result();
+                    stars += d.stars();
                 }
                 None => {}
             }
         }
+        print!("Year {:4} {}/50\n\n", year, stars);
     }
 }
