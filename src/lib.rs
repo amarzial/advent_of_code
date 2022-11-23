@@ -1,4 +1,5 @@
 pub mod day;
+pub mod grid;
 pub mod utils;
 mod y2018;
 mod y2020;
