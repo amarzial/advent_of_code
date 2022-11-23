@@ -8,4 +8,5 @@ default-run = "aoc"
 
 [dependencies]
 argparse = "0.2.2"
+num = "0.4.0"
 pathfinding = "3.0.14"
