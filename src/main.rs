@@ -1,31 +1,45 @@
+extern crate argparse;
+
 use aoc::run;
+use argparse::{ArgumentParser, Store, StoreTrue};
 
 #[derive(Debug)]
 struct Config {
     year: Option<u32>,
     day: Option<u32>,
+    test: bool,
 }
 
 fn parse_args() -> Config {
-    let mut args = std::env::args();
-    args.next();
+    let mut y = 0;
+    let mut d = 0;
+    let mut test = false;
+    {
+        let mut ap = ArgumentParser::new();
+        ap.refer(&mut y)
+            .add_option(&["--year"], Store, "Run a specific year");
+        ap.refer(&mut d)
+            .add_option(&["--day"], Store, "Run a specific day");
+        ap.refer(&mut test)
+            .add_option(&["--test"], StoreTrue, "Run test input");
+        ap.parse_args_or_exit();
+    }
 
-    let y = match args.next() {
-        Some(s) => Some(s.parse::<u32>().unwrap()),
-        _ => None,
+    let conf = Config {
+        year: match y {
+            0 => None,
+            _ => Some(y),
+        },
+        day: match d {
+            0 => None,
+            _ => Some(d),
+        },
+        test: test,
     };
-
-    let d = match args.next() {
-        Some(s) => Some(s.parse::<u32>().unwrap()),
-        _ => None,
-    };
-
-    let conf = Config { year: y, day: d };
     conf
 }
 
-fn main() {
-    let cfg = parse_args();
+fn execute(cfg: &Config) {
     let years = match cfg.year {
         Some(y) => y..y + 1,
         None => 2021..2023,
@@ -39,7 +53,7 @@ fn main() {
     for year in years {
         let mut stars = 0;
         for day in days.clone() {
-            match run(year, day) {
+            match run(year, day, cfg.test) {
                 Some(d) => {
                     d.print_result();
                     stars += d.stars();
@@ -49,4 +63,9 @@ fn main() {
         }
         print!("Year {:4} {}/50\n\n", year, stars);
     }
+}
+
+fn main() {
+    let cfg = parse_args();
+    execute(&cfg);
 }

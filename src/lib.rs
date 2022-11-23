@@ -7,8 +7,8 @@ mod y2022;
 
 use std::time::Instant;
 
-pub fn run(year: u32, day: u32) -> Option<day::Day> {
-    let mut d = day::Day::new(year, day);
+pub fn run(year: u32, day: u32, test: bool) -> Option<day::Day> {
+    let mut d = day::Day::new(year, day, test);
     let now = Instant::now();
     let success = match year {
         2018 => match day {

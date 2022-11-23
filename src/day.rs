@@ -14,10 +14,16 @@ pub enum Part {
 }
 
 impl Day {
-    fn load_input(&mut self) {
-        self.input =
-            std::fs::read_to_string(format!("./input/{:04}/d{:02}.txt", self.year, self.day))
-                .unwrap_or(String::from(""));
+    fn load_input(&mut self, test: bool) {
+        let folder = match test {
+            false => "input",
+            true => "input_test",
+        };
+        self.input = std::fs::read_to_string(format!(
+            "./{}/{:04}/d{:02}.txt",
+            folder, self.year, self.day
+        ))
+        .unwrap_or(String::from(""));
     }
 
     pub fn set_part_1(&mut self, value: String) {
@@ -28,7 +34,7 @@ impl Day {
         self.part2 = Some(value)
     }
 
-    pub fn new(year: u32, day: u32) -> Day {
+    pub fn new(year: u32, day: u32, test: bool) -> Day {
         let mut d = Day {
             year,
             day,
@@ -37,7 +43,7 @@ impl Day {
             part2: Option::None,
             time: std::time::Duration::new(0, 0),
         };
-        d.load_input();
+        d.load_input(test);
         d
     }
 
