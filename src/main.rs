@@ -42,7 +42,7 @@ fn parse_args() -> Config {
 fn execute(cfg: &Config) {
     let years = match cfg.year {
         Some(y) => y..y + 1,
-        None => 2021..2023,
+        None => 2018..2023,
     };
 
     let days = match cfg.day {
