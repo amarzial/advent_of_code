@@ -1,3 +1,8 @@
+pub fn load_input(folder: &str, year: i32, day: i32) -> String {
+    let path = format!("./{}/{:04}_{:02}.txt", folder, year, day);
+    std::fs::read_to_string(&path).expect(&path)
+}
+
 pub fn read_list<T: std::str::FromStr + std::fmt::Debug>(input: &str) -> Vec<T>
 where
     T: std::str::FromStr,
@@ -30,4 +35,17 @@ where
         .map(|x| return x.parse().unwrap())
         .collect();
     return data;
+}
+
+pub fn cache(enter: Option<String>) -> Option<String> {
+    static mut C: Option<String> = None;
+
+    let mut current = None;
+    unsafe {
+        if C.is_some() {
+            current = C.clone();
+        }
+        C = enter;
+    }
+    current
 }

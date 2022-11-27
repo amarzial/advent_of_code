@@ -1,0 +1,5 @@
+[alias]
+prepare = "run --bin prepare_day -- "
+
+solve = "run --bin"
+all = "run"
