@@ -1,4 +1,4 @@
-use std::{collections::HashSet, mem::swap};
+use std::collections::HashSet;
 
 #[derive(Debug, Clone, Copy)]
 struct Point {
