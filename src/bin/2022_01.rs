@@ -1,4 +1,4 @@
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<i32> {
     let lines = aoc::utils::read_list_parse(&input, |s| s.parse::<i32>());
 
     let mut current = 0;
@@ -13,10 +13,10 @@ fn part_one(input: &str) -> Option<String> {
     }
     max = max.max(current);
 
-    return Some(max.to_string());
+    return Some(max);
 }
 
-fn part_two(input: &str) -> Option<String> {
+fn part_two(input: &str) -> Option<i32> {
     let lines = aoc::utils::read_list_parse(&input, |s| s.parse::<i32>());
 
     let mut elves = Vec::new();
@@ -34,7 +34,7 @@ fn part_two(input: &str) -> Option<String> {
     elves.sort();
     let sum: i32 = elves[elves.len() - 3..].into_iter().sum();
 
-    return Some(sum.to_string());
+    return Some(sum);
 }
 
 fn main() {
@@ -49,12 +49,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 01);
-        assert_eq!(part_one(&input), Some(24000.to_string()));
+        assert_eq!(part_one(&input), Some(24000));
     }
 
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 01);
-        assert_eq!(part_two(&input), Some(45000.to_string()));
+        assert_eq!(part_two(&input), Some(45000));
     }
 }

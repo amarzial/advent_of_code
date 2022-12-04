@@ -30,8 +30,6 @@ fn is_contained(p1: Pair, p2: Pair) -> bool {
 }
 
 fn is_overlap(mut p1: Pair, mut p2: Pair) -> bool {
-    //  -----
-    //    ------
     if p1.0 > p2.0 {
         swap(&mut p1, &mut p2);
     }
@@ -41,7 +39,7 @@ fn is_overlap(mut p1: Pair, mut p2: Pair) -> bool {
     false
 }
 
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<i32> {
     let pairs = aoc::utils::read_list_parse(input, parse_line);
 
     let res = pairs.iter().fold(0, |tot, p| {
@@ -50,10 +48,10 @@ fn part_one(input: &str) -> Option<String> {
             false => 0,
         }
     });
-    Some(res.to_string())
+    Some(res)
 }
 
-fn part_two(input: &str) -> Option<String> {
+fn part_two(input: &str) -> Option<i32> {
     let pairs = aoc::utils::read_list_parse(input, parse_line);
 
     let res = pairs.iter().fold(0, |tot, p| {
@@ -62,7 +60,7 @@ fn part_two(input: &str) -> Option<String> {
             false => 0,
         }
     });
-    Some(res.to_string())
+    Some(res)
 }
 
 fn main() {
@@ -77,12 +75,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 04);
-        assert_eq!(part_one(&input), Some(2.to_string()));
+        assert_eq!(part_one(&input), Some(2));
     }
 
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 04);
-        assert_eq!(part_two(&input), Some(4.to_string()));
+        assert_eq!(part_two(&input), Some(4));
     }
 }

@@ -46,7 +46,7 @@ fn strategy_score(elf: char, player: char) -> i32 {
     }
 }
 
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<i32> {
     let actions = aoc::utils::read_list_parse(input, |s| {
         let mut c = s.chars();
         (c.next().unwrap(), c.nth(1).unwrap())
@@ -62,10 +62,10 @@ fn part_one(input: &str) -> Option<String> {
         };
         score += play_score(a.0, a.1);
     }
-    Some(score.to_string())
+    Some(score)
 }
 
-fn part_two(input: &str) -> Option<String> {
+fn part_two(input: &str) -> Option<i32> {
     let actions = aoc::utils::read_list_parse(input, |s| {
         let mut c = s.chars();
         (c.next().unwrap(), c.nth(1).unwrap())
@@ -75,7 +75,7 @@ fn part_two(input: &str) -> Option<String> {
     for a in actions {
         score += strategy_score(a.0, a.1);
     }
-    Some(score.to_string())
+    Some(score)
 }
 
 fn main() {
@@ -90,12 +90,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 02);
-        assert_eq!(part_one(&input), Some(15.to_string()));
+        assert_eq!(part_one(&input), Some(15));
     }
 
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 02);
-        assert_eq!(part_two(&input), Some(12.to_string()));
+        assert_eq!(part_two(&input), Some(12));
     }
 }

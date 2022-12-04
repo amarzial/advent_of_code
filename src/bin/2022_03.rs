@@ -27,7 +27,7 @@ fn char_value(c: char) -> i32 {
     }
 }
 
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<i32> {
     let bags = aoc::utils::read_list_parse(input, parse_bag);
     let mut value = 0;
     for b in bags.iter() {
@@ -36,10 +36,10 @@ fn part_one(input: &str) -> Option<String> {
             value += char_value(*e);
         }
     }
-    Some(value.to_string())
+    Some(value)
 }
 
-fn part_two(input: &str) -> Option<String> {
+fn part_two(input: &str) -> Option<i32> {
     let mut bags = aoc::utils::read_list_parse(input, parse_bag_2);
 
     let mut value = 0;
@@ -54,7 +54,7 @@ fn part_two(input: &str) -> Option<String> {
         }
     }
 
-    Some(value.to_string())
+    Some(value)
 }
 
 fn main() {
@@ -69,12 +69,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 03);
-        assert_eq!(part_one(&input), Some(157.to_string()));
+        assert_eq!(part_one(&input), Some(157));
     }
 
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 03);
-        assert_eq!(part_two(&input), Some(70.to_string()));
+        assert_eq!(part_two(&input), Some(70));
     }
 }
