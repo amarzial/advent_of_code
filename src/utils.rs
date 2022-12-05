@@ -37,6 +37,34 @@ where
     return data;
 }
 
+pub fn read_pattern<'a>(pattern: &'a str, input: &'a str) -> Option<Vec<&'a str>> {
+    let mut out = Vec::new();
+    let mut start = 0;
+    let mut end;
+
+    for m in pattern.split("{}") {
+        match input[start..].find(m) {
+            Some(idx) => {
+                // println!("{}", &input[start..]);
+                end = start + idx;
+                if end > start {
+                    out.push(&input[start..end]);
+                }
+                start = start + idx + m.len();
+                // println!("{}- {}, {}", idx, start, end);
+            }
+            None => {
+                return None;
+            }
+        }
+    }
+
+    if start != input.len() {
+        out.push(&input[start..]);
+    }
+    Some(out)
+}
+
 pub fn cache(enter: Option<String>) -> Option<String> {
     static mut C: Option<String> = None;
 
@@ -48,4 +76,20 @@ pub fn cache(enter: Option<String>) -> Option<String> {
         C = enter;
     }
     current
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_pattern_parser() {
+        let res = read_pattern("move {} from {} to {}", "move 1 from 32 to 4");
+        assert_eq!(res, Some(vec!["1", "32", "4"]));
+        let res = read_pattern("{}-{},{}-{}", "1-2,30-4");
+        assert_eq!(res, Some(vec!["1", "2", "30", "4"]));
+        let res = read_pattern("move {} from {} to {} asdf", "move 1 from 32 to 4 asdf");
+        assert_eq!(res, Some(vec!["1", "32", "4"]));
+        let res = read_pattern("move {} from {} to {} asdf", "movasde 1 frofm 32 to 4 asdf");
+        assert_eq!(res, None);
+    }
 }
