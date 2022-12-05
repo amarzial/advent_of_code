@@ -45,13 +45,11 @@ pub fn read_pattern<'a>(pattern: &'a str, input: &'a str) -> Option<Vec<&'a str>
     for m in pattern.split("{}") {
         match input[start..].find(m) {
             Some(idx) => {
-                // println!("{}", &input[start..]);
                 end = start + idx;
                 if end > start {
                     out.push(&input[start..end]);
                 }
                 start = start + idx + m.len();
-                // println!("{}- {}, {}", idx, start, end);
             }
             None => {
                 return None;
