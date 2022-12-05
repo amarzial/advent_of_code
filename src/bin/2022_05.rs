@@ -48,8 +48,9 @@ fn parse_input(input: &str) -> (Stacks, Moves) {
     (stacks, moves)
 }
 
-fn part_one(input: &str) -> Option<String> {
-    let (mut stack, moves) = parse_input(input);
+fn part_one(input: &(Stacks, Moves)) -> Option<String> {
+    let mut stack = input.0.clone();
+    let moves = &input.1;
 
     for m in moves {
         for _i in 0..m.count {
@@ -70,16 +71,14 @@ fn part_one(input: &str) -> Option<String> {
     Some(out)
 }
 
-fn part_two(input: &str) -> Option<String> {
-    let (mut stack, moves) = parse_input(input);
+fn part_two(input: &(Stacks, Moves)) -> Option<String> {
+    let mut stack = input.0.clone();
+    let moves = &input.1;
 
     for m in moves {
-        let mut items = Vec::new();
-        for _i in 0..m.count {
-            let letter = stack[m.from - 1].pop().unwrap();
-            items.insert(0, letter);
-        }
-        stack[m.to - 1].extend(items);
+        let len = stack[m.from - 1].len();
+        let letters = stack[m.from - 1].split_off(len - m.count);
+        stack[m.to - 1].extend(letters);
     }
 
     let mut out = String::new();
@@ -96,8 +95,10 @@ fn part_two(input: &str) -> Option<String> {
 
 fn main() {
     let input = aoc::utils::load_input("inputs", 2022, 05);
-    aoc::solve!(1, part_one, &input);
-    aoc::solve!(2, part_two, &input);
+    let parsed = parse_input(&input);
+
+    aoc::solve!(1, part_one, &parsed);
+    aoc::solve!(2, part_two, &parsed);
 }
 
 #[cfg(test)]
@@ -106,12 +107,14 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 05);
-        assert_eq!(part_one(&input), Some(String::from("CMZ")));
+        let parsed = parse_input(&input);
+        assert_eq!(part_one(&parsed), Some(String::from("CMZ")));
     }
 
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 05);
-        assert_eq!(part_two(&input), Some(String::from("MCD")));
+        let parsed = parse_input(&input);
+        assert_eq!(part_two(&parsed), Some(String::from("MCD")));
     }
 }
