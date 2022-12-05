@@ -11,7 +11,7 @@ macro_rules! solve {
             let elapsed = timer.elapsed();
             match result {
                 Some(result) => {
-                    println!("  {} (elapsed: {:.2?})", result, elapsed);
+                    println!(" (time: {:.2?})\n {}", elapsed, result);
                 }
                 None => {
                     println!("  not solved.")
@@ -19,7 +19,7 @@ macro_rules! solve {
             }
         }
 
-        println!("Part {}", $part);
+        print!("Part {}", $part);
         print_result($function, $input);
     }};
 }
