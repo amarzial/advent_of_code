@@ -3,23 +3,12 @@ use std::mem::swap;
 type Pair = (i32, i32);
 
 fn parse_line(line: &str) -> (Pair, Pair) {
-    let mut pairs = line.split(',');
-    let mut first = pairs
-        .next()
+    let numbers: Vec<i32> = aoc::utils::read_pattern("{}-{},{}-{}", line)
         .unwrap()
-        .split('-')
-        .into_iter()
-        .map(|n| n.parse::<i32>().unwrap());
-    let mut second = pairs
-        .next()
-        .unwrap()
-        .split('-')
-        .into_iter()
-        .map(|n| n.parse::<i32>().unwrap());
-    (
-        (first.next().unwrap(), first.next().unwrap()),
-        (second.next().unwrap(), second.next().unwrap()),
-    )
+        .iter()
+        .map(|s| s.parse::<i32>().unwrap())
+        .collect();
+    ((numbers[0], numbers[1]), (numbers[2], numbers[3]))
 }
 
 fn is_contained(p1: Pair, p2: Pair) -> bool {

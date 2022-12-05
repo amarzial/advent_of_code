@@ -15,10 +15,14 @@ fn parse_input(input: &str) -> (Stacks, Moves) {
 
     for l in lines {
         if l.starts_with('m') {
-            let mut m = l.split(' ');
-            let count = m.nth(1).unwrap().parse::<usize>().expect(&l);
-            let from = m.nth(1).unwrap().parse::<usize>().unwrap();
-            let to = m.nth(1).unwrap().parse::<usize>().unwrap();
+            let values: Vec<usize> = aoc::utils::read_pattern("move {} from {} to {}", &l)
+                .unwrap()
+                .iter()
+                .map(|s| s.parse().unwrap())
+                .collect();
+            let count = values[0];
+            let from = values[1];
+            let to = values[2];
             moves.push(Move { count, from, to });
         } else {
             let mut cnt = 0;
