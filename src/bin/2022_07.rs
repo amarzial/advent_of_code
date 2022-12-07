@@ -65,19 +65,30 @@ fn build_tree(commands: &[String], start: usize) -> (Content, usize, usize) {
 
 fn filter_dir(node: &Node, size: usize) -> usize {
     match node.t {
-        Type::File => {
-            if node.size <= size {
-                0
-            } else {
-                0
-            }
-        }
+        Type::File => 0,
         Type::Dir => {
             let mut content_s = if node.size <= size { node.size } else { 0 };
             for c in node.content.borrow().values() {
                 content_s += filter_dir(c, size);
             }
             content_s
+        }
+    }
+}
+
+fn filter_dir_part_2(node: &Node, size: usize) -> usize {
+    match node.t {
+        Type::File => usize::MAX,
+        Type::Dir => {
+            let mut folder = if node.size >= size {
+                node.size
+            } else {
+                usize::MAX
+            };
+            for c in node.content.borrow().values() {
+                folder = folder.min(filter_dir_part_2(c, size));
+            }
+            folder
         }
     }
 }
@@ -92,8 +103,18 @@ fn part_one(input: &str) -> Option<usize> {
     Some(filter_dir(&root, 100000))
 }
 
-fn part_two(input: &str) -> Option<String> {
-    None
+fn part_two(input: &str) -> Option<usize> {
+    let mut root = Node::new(Type::Dir, 0);
+    {
+        let (tree, _, root_size) = build_tree(aoc::utils::read_list(input).as_slice(), 1);
+        root.size = root_size;
+        root.content.get_mut().extend(tree);
+    }
+
+    let disk_size = 70000000;
+    let needed_space = 30000000 - (disk_size - root.size);
+
+    Some(filter_dir_part_2(&root, needed_space))
 }
 
 fn main() {
@@ -114,6 +135,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 07);
-        assert_eq!(part_two(&input), None);
+        assert_eq!(part_two(&input), Some(24933642));
     }
 }
