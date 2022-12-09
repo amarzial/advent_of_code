@@ -1,5 +1,5 @@
 pub mod day;
-pub mod grid;
+pub mod helpers;
 pub mod utils;
 
 #[macro_export]

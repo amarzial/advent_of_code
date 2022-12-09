@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc::grid::manhattan;
+use aoc::helpers::Coordinate;
 
 fn parse_point(line: &str) -> (i32, i32) {
     let mut coords = line.split(", ");
@@ -18,7 +18,7 @@ fn find_best(
     let mut min = i32::MAX;
     for i in 0..points.len() {
         let p = points[i];
-        let v = manhattan(p, (x, y));
+        let v = Coordinate::manhattan(&Coordinate::from(p), &Coordinate::from((x, y)));
         min = min.min(v);
         score.insert(i, v);
     }
