@@ -108,10 +108,4 @@ mod tests {
         let input = aoc::utils::load_input("examples", 2018, 6);
         assert_eq!(part_one(&input), Some(String::from("17")));
     }
-
-    #[test]
-    fn test_part_two() {
-        let input = aoc::utils::load_input("examples", 2018, 6);
-        assert_eq!(part_two(&input), Some(String::from("16")));
-    }
 }

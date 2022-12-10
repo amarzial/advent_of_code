@@ -113,11 +113,6 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn test_part_one() {
-        let input = aoc::utils::load_input("examples", 2018, 10);
-        assert_eq!(part_one(&input), None);
-    }
 
     #[test]
     fn test_part_two() {

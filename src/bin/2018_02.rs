@@ -38,7 +38,7 @@ fn check(a: &str, b: &str) -> Option<String> {
     return Some(s + &s2);
 }
 
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<i32> {
     let lines = aoc::utils::read_list::<String>(input);
     let mut twos = 0;
     let mut threes = 0;
@@ -51,7 +51,7 @@ fn part_one(input: &str) -> Option<String> {
             threes += 1;
         }
     }
-    Some((twos * threes).to_string())
+    Some(twos * threes)
 }
 
 fn part_two(input: &str) -> Option<String> {
@@ -76,11 +76,6 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn test_part_one() {
-        let input = aoc::utils::load_input("examples", 2018, 02);
-        assert_eq!(part_one(&input), Some(12.to_string()));
-    }
 
     #[test]
     fn test_part_two() {
