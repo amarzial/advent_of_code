@@ -1,7 +1,5 @@
 use std::cell::RefCell;
 
-use num::Integer;
-
 type Int = u64;
 
 #[derive(Debug)]
