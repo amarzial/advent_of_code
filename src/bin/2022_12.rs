@@ -14,7 +14,7 @@ fn part_one(input: &str) -> Option<usize> {
         }
     }
 
-    let res = pathfinding::directed::dijkstra::dijkstra(
+    let res = pathfinding::directed::bfs::bfs(
         &start,
         |s| {
             s.neighbors()
@@ -35,12 +35,11 @@ fn part_one(input: &str) -> Option<usize> {
                     };
                     (from <= to) || (from as u8 - to as u8 == 1)
                 })
-                .map(|n| (n, 1))
-                .collect::<Vec<(Coordinate<i32>, usize)>>()
+                .collect::<Vec<Coordinate<i32>>>()
         },
         |n| grid[n.y as usize][n.x as usize] == 'S',
     );
-    Some(res.unwrap().1)
+    Some(res.unwrap().len())
 }
 
 fn part_two(input: &str) -> Option<usize> {
@@ -57,7 +56,7 @@ fn part_two(input: &str) -> Option<usize> {
         }
     }
 
-    let res = pathfinding::directed::dijkstra::dijkstra(
+    let res = pathfinding::directed::bfs::bfs(
         &start,
         |s| {
             s.neighbors()
@@ -78,12 +77,11 @@ fn part_two(input: &str) -> Option<usize> {
                     };
                     (from <= to) || (from as u8 - to as u8 == 1)
                 })
-                .map(|n| (n, 1))
-                .collect::<Vec<(Coordinate<i32>, usize)>>()
+                .collect::<Vec<Coordinate<i32>>>()
         },
         |n| grid[n.y as usize][n.x as usize] == 'a' || grid[n.y as usize][n.x as usize] == 'S',
     );
-    Some(res.unwrap().1)
+    Some(res.unwrap().len())
 }
 
 fn main() {
