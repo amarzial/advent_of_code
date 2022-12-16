@@ -14,7 +14,7 @@ fn compare(lhs: &JsonValue, rhs: &JsonValue) -> std::cmp::Ordering {
         }
         return compare(&a, &b);
     } else {
-        if let JsonValue::Number(n) = lhs {
+        if let JsonValue::Number(_) = lhs {
             return lhs.as_i32().unwrap().cmp(&rhs.as_i32().unwrap());
         } else {
             let min = lhs.len().min(rhs.len());
