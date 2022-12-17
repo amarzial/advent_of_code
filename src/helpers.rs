@@ -119,6 +119,23 @@ impl<T: NumAssignOps> std::ops::SubAssign for Coordinate<T> {
     }
 }
 
+impl<T: NumOps> std::ops::Mul for Coordinate<T> {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self {
+        Coordinate {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y,
+        }
+    }
+}
+
+impl<T: NumAssignOps> std::ops::MulAssign for Coordinate<T> {
+    fn mul_assign(&mut self, rhs: Self) {
+        self.x *= rhs.x;
+        self.y *= rhs.y;
+    }
+}
+
 impl<T: Eq + PartialEq + Ord + Copy> Ord for Coordinate<T> {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         (self.y, self.x).cmp(&(other.y, other.x))
