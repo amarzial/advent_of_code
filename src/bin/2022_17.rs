@@ -6,7 +6,7 @@ type Int = i32;
 
 type Coord = Coordinate<Int>;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 struct Piece {
     data: Vec<Coord>,
     width: usize,
@@ -43,7 +43,7 @@ struct Tower {
 
     current_pat: usize,
     current_piece: usize,
-    top_rock: usize,
+    top_rock: Int,
 }
 
 impl Tower {
@@ -68,7 +68,7 @@ impl Tower {
     }
 
     fn next_pattern(&mut self) -> u8 {
-        let p = self.pattern.as_bytes()[self.current_piece];
+        let p = self.pattern.as_bytes()[self.current_pat];
         self.current_pat += 1;
         if self.current_pat >= self.pattern.len() {
             self.current_pat = 0;
@@ -76,14 +76,15 @@ impl Tower {
         p
     }
 
-    fn print(&self, pos: Coord, pc: &Piece) {
-        for i in (0..20).rev() {
-            for x in (0..7) {
+    fn _print(&self, pos: Coord, pc: &Piece) {
+        let inv = Coord::new(1, -1);
+        for i in (0..30).rev() {
+            for x in 0..7 {
                 let pt = Coord::new(x, i);
                 let mut c = if self.grid.contains(&pt) { '#' } else { '.' };
 
-                if pc.data.iter().any(|p| pos + *p == pt) {
-                    c = '#';
+                if pc.data.iter().any(|p| pos + (*p * inv) == pt) {
+                    c = '@';
                 }
 
                 print!("{}", c);
@@ -93,41 +94,72 @@ impl Tower {
         println!("");
     }
 
-    fn step(&mut self, mut pos: Coord, piece: &Piece) -> Option<Coord> {
-        let mov = self.next_pattern();
+    fn store(&mut self, pos: Coord, piece: &Piece) {
+        let inv = Coord::new(1, -1);
+        for x in piece.data.iter() {
+            self.grid.insert(pos + (*x * inv));
+        }
+        self.top_rock = self.top_rock.max(pos.y + 1);
+    }
 
-        match mov {
-            b'>' => {
-                pos.x = i32::min(7 - piece.width as i32, pos.x + 1);
-            }
-            _ => {
-                pos.x = i32::max(0, pos.x - 1);
-            }
-        };
+    fn check_walls(&self, pos: Coord, piece: &Piece) -> bool {
+        let inv = Coord::new(1, -1);
+        if (pos.x < 0) || ((7 - piece.width as Int) < pos.x) {
+            return true;
+        }
+        piece
+            .data
+            .iter()
+            .map(|p| pos + (*p * inv))
+            .any(|p| self.grid.contains(&p))
+    }
 
+    fn check_collision(&self, mut pos: Coord, piece: &Piece) -> bool {
+        let inv = Coord::new(1, -1);
         pos.y -= 1;
 
-        self.print(pos, piece);
-
-        if pos.y - (piece.height as Int - 1) == 0 {
-            return None;
+        if pos.y - (piece.height as Int - 1) < 0 {
+            return true;
         }
-        Some(pos)
-        // for c in piece.data.iter() {}
+        piece
+            .data
+            .iter()
+            .map(|p| pos + (*p * inv))
+            .any(|p| self.grid.contains(&p))
+    }
+
+    fn step(&mut self, mut pos: Coord, piece: &Piece) -> (Coord, bool) {
+        let mov = self.next_pattern();
+
+        let movement = if mov == b'>' {
+            Coord::new(1, 0)
+        } else {
+            Coord::new(-1, 0)
+        };
+
+        pos += movement;
+        if self.check_walls(pos, piece) {
+            pos -= movement;
+        }
+
+        if self.check_collision(pos, piece) {
+            self.store(pos, piece);
+            return (pos, false);
+        }
+        pos.y -= 1;
+        (pos, true)
     }
 
     fn run(&mut self) {
         let p = self.next_piece();
 
-        let mut pos = Coord::new(2, (self.top_rock + 3 + p.height - 1) as i32);
+        let mut pos = Coord::new(2, (self.top_rock as usize + 3 + p.height - 1) as i32);
 
         loop {
             let r = self.step(pos, &p);
-            match r {
-                Some(p) => pos = p,
-                None => {
-                    break;
-                }
+            pos = r.0;
+            if !r.1 {
+                break;
             }
         }
     }
@@ -143,11 +175,12 @@ fn load_pieces() -> Vec<Piece> {
     ]
 }
 
-fn part_one(input: &str) -> Option<String> {
+fn part_one(input: &str) -> Option<Int> {
     let mut tow = Tower::new(input.trim().to_string(), load_pieces());
-    tow.run();
-
-    None
+    for _ in 0..2022 {
+        tow.run();
+    }
+    Some(tow.top_rock)
 }
 
 fn part_two(input: &str) -> Option<String> {
@@ -166,7 +199,7 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input = aoc::utils::load_input("examples", 2022, 17);
-        assert_eq!(part_one(&input), None);
+        assert_eq!(part_one(&input), Some(3068));
     }
 
     #[test]
