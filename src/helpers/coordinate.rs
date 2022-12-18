@@ -62,8 +62,8 @@ impl<T: Integer + Copy> Coordinate<T> {
                 y: self.y,
             },
             Coordinate {
-                x: self.x,
-                y: self.y + num::one(),
+                x: self.x + num::one(),
+                y: self.y,
             },
             Coordinate {
                 x: self.x - num::one(),
