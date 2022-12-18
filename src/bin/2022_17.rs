@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 use aoc::helpers::coordinate::Coordinate;
 
@@ -38,23 +38,28 @@ fn parse_piece(str: &str) -> Piece {
 
 struct Tower {
     pattern: String,
-    grid: HashSet<Coord>,
+    grid: Vec<u8>,
     pieces: Vec<Piece>,
 
     current_pat: usize,
     current_piece: usize,
     top_rock: Int,
+    block_count: usize,
 }
 
 impl Tower {
     fn new(pat: String, pcs: Vec<Piece>) -> Tower {
+        let mut grid: Vec<u8> = Vec::new();
+        grid.resize(10000, 0);
+
         Tower {
             pattern: pat,
-            grid: HashSet::new(),
+            grid,
             pieces: pcs,
             current_pat: 0,
             current_piece: 0,
             top_rock: 0,
+            block_count: 0,
         }
     }
 
@@ -76,30 +81,32 @@ impl Tower {
         p
     }
 
-    fn _print(&self, pos: Coord, pc: &Piece) {
-        let inv = Coord::new(1, -1);
+    fn _print(&self) {
         for i in (0..30).rev() {
-            for x in 0..7 {
-                let pt = Coord::new(x, i);
-                let mut c = if self.grid.contains(&pt) { '#' } else { '.' };
-
-                if pc.data.iter().any(|p| pos + (*p * inv) == pt) {
-                    c = '@';
-                }
-
-                print!("{}", c);
-            }
-            println!("");
+            let row = match self.grid.get(i) {
+                Some(v) => (0..7)
+                    .map(|x| if (v & (1 << x)) != 0 { '#' } else { '.' })
+                    .collect::<String>(),
+                None => String::from(".".repeat(7)),
+            };
+            println!("{}", row);
         }
         println!("");
     }
 
     fn store(&mut self, pos: Coord, piece: &Piece) {
         let inv = Coord::new(1, -1);
-        for x in piece.data.iter() {
-            self.grid.insert(pos + (*x * inv));
+        for c in piece.data.iter() {
+            let p = pos + *c * inv;
+            let x = (1 as u8) << p.x;
+            self.grid[p.y as usize] |= x;
         }
         self.top_rock = self.top_rock.max(pos.y + 1);
+    }
+
+    fn check_grid(&self, pos: Coord) -> bool {
+        let x = (1 as u8) << pos.x;
+        self.grid[pos.y as usize] & x != 0
     }
 
     fn check_walls(&self, pos: Coord, piece: &Piece) -> bool {
@@ -111,7 +118,7 @@ impl Tower {
             .data
             .iter()
             .map(|p| pos + (*p * inv))
-            .any(|p| self.grid.contains(&p))
+            .any(|p| self.check_grid(p))
     }
 
     fn check_collision(&self, mut pos: Coord, piece: &Piece) -> bool {
@@ -125,7 +132,7 @@ impl Tower {
             .data
             .iter()
             .map(|p| pos + (*p * inv))
-            .any(|p| self.grid.contains(&p))
+            .any(|p| self.check_grid(p))
     }
 
     fn step(&mut self, mut pos: Coord, piece: &Piece) -> (Coord, bool) {
@@ -162,6 +169,23 @@ impl Tower {
                 break;
             }
         }
+        self.block_count += 1;
+    }
+
+    fn hash(&self) -> Option<(usize, usize, Vec<u8>)> {
+        if self.top_rock < 1500 {
+            return None;
+        };
+        Some((
+            self.current_pat,
+            self.current_piece,
+            self.grid
+                .get((self.top_rock as usize - 4)..(self.top_rock as usize))
+                .unwrap()
+                .iter()
+                .cloned()
+                .collect::<Vec<u8>>(),
+        ))
     }
 }
 
@@ -183,8 +207,38 @@ fn part_one(input: &str) -> Option<Int> {
     Some(tow.top_rock)
 }
 
-fn part_two(input: &str) -> Option<String> {
-    None
+fn loop_detect(tow: &mut Tower) -> (usize, usize) {
+    let mut set = HashMap::new();
+
+    for i in 0..100000 {
+        tow.run();
+        if let Some(h) = tow.hash() {
+            if !set.contains_key(&h) {
+                set.insert(h, (i, tow.top_rock));
+            } else {
+                let v = set.get(&h).unwrap();
+                return (i - v.0, (tow.top_rock - v.1) as usize);
+            }
+        }
+    }
+    (0, 0)
+}
+
+fn part_two(input: &str) -> Option<usize> {
+    let mut tow = Tower::new(input.trim().to_string(), load_pieces());
+
+    let (period, height) = loop_detect(&mut tow);
+
+    let total_blocks: usize = 1000000000000;
+    let cycles = (total_blocks - tow.block_count) / period;
+    let additional_heigth = height * cycles;
+    let remaining = total_blocks - (cycles * period) - tow.block_count;
+
+    for _ in 0..remaining {
+        tow.run();
+    }
+
+    Some(tow.top_rock as usize + additional_heigth)
 }
 
 fn main() {
@@ -205,6 +259,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let input = aoc::utils::load_input("examples", 2022, 17);
-        assert_eq!(part_two(&input), None);
+        assert_eq!(part_two(&input), Some(1514285714288));
     }
 }
