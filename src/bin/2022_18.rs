@@ -36,7 +36,7 @@ fn part_one(input: &str) -> Option<i32> {
 fn part_two(input: &str) -> Option<i32> {
     let grid = build_input(input);
 
-    let min = Coord::new(0, 0, 0);
+    let min = Coord::new(-1, -1, -1);
     let mut max = grid.iter().fold(Coord::new(1, 1, 1), |max, next| {
         Coord::new(max.x.max(next.x), max.y.max(next.y), max.z.max(next.z))
     });
