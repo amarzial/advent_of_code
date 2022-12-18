@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use aoc::helpers::Coordinate;
+use aoc::helpers::coordinate::Coordinate;
 
 fn parse_point(line: &str) -> (i32, i32) {
     let mut coords = line.split(", ");

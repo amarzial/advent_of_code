@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use aoc::helpers::Coordinate;
+use aoc::helpers::coordinate::Coordinate;
 
 type Coord = Coordinate<i32>;
 

@@ -1,6 +1,6 @@
 use std::{collections::HashSet, iter::successors};
 
-use aoc::helpers::Coordinate;
+use aoc::helpers::coordinate::Coordinate;
 
 type Int = i32;
 type Grid = HashSet<Coordinate<i32>>;

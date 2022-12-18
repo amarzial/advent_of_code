@@ -1,4 +1,4 @@
-use aoc::helpers::Coordinate;
+use aoc::helpers::coordinate::Coordinate;
 
 fn part_one(input: &str) -> Option<usize> {
     let grid: Vec<Vec<char>> = aoc::utils::read_list_parse(input, |l| l.chars().collect());
