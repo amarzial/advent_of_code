@@ -4,6 +4,17 @@ use itertools::Itertools;
 
 type Int = i64;
 
+fn move_elem(e: &(Int, Int), list: &mut Vec<(Int, Int)>) {
+    let mut idx = list.iter().find_position(|x| *x == e).unwrap().0 as Int;
+    let e = list.remove(idx as usize);
+    idx += e.0;
+    idx %= list.len() as Int;
+    if idx < 0 {
+        idx += list.len() as Int;
+    }
+    list.insert(idx as usize, e);
+}
+
 fn part_one(input: &str) -> Option<Int> {
     let numbers: Vec<Int> = aoc::utils::read_list(input);
 
@@ -18,15 +29,9 @@ fn part_one(input: &str) -> Option<Int> {
     }
 
     let order = list.clone();
+
     for e in order.iter() {
-        let mut idx = list.iter().find_position(|x| *x == e).unwrap().0 as Int;
-        let e = list.remove(idx as usize);
-        idx += e.0;
-        idx %= list.len() as Int;
-        if idx < 0 {
-            idx += list.len() as Int;
-        }
-        list.insert(idx as usize, e);
+        move_elem(e, &mut list);
     }
 
     let mut result = 0;
@@ -51,7 +56,7 @@ fn part_two(input: &str) -> Option<Int> {
     list.reserve(numbers.len());
     for l in numbers.iter() {
         let num = l * decryption_key;
-        let n = nth.get(l).unwrap_or(&0).clone();
+        let n = nth.get(&num).unwrap_or(&0).clone();
         nth.insert(num, n + 1);
 
         list.push((num, n));
@@ -60,29 +65,18 @@ fn part_two(input: &str) -> Option<Int> {
     let order = list.clone();
     for _ in 0..10 {
         for e in order.iter() {
-            let mut idx = list.iter().find_position(|x| *x == e).unwrap().0 as Int;
-            let e = list.remove(idx as usize);
-            idx += e.0;
-            idx %= list.len() as Int;
-            if idx < 0 {
-                idx += list.len() as Int;
-            }
-
-            list.insert(idx as usize, e);
+            move_elem(e, &mut list);
         }
     }
 
     let mut result = 0;
-    let mut start = list.iter().find_position(|x| (**x).0 == 0).unwrap().0;
+    let mut start = list.iter().find_position(|x| (**x) == (0, 0)).unwrap().0;
     start = (start + 1000) % list.len();
     result += list[start].0;
-    println!("{:?}", list[start]);
     start = (start + 1000) % list.len();
     result += list[start].0;
-    println!("{:?}", list[start]);
     start = (start + 1000) % list.len();
     result += list[start].0;
-    println!("{:?}", list[start]);
 
     Some(result)
 }
