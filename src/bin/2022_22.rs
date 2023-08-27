@@ -1,13 +1,14 @@
 use aoc::helpers::coordinate::Coordinate;
+use core::fmt;
+use std::cell::RefCell;
 use std::rc::Rc;
 
 type Coord = Coordinate<Int>;
 
-#[derive(Debug)]
 struct Node {
     val: char,
     coord: Coord,
-    neighbors: Vec<Rc<Node>>,
+    neighbors: [Option<Rc<RefCell<Node>>>; 4],
 }
 
 type Int = i32;
@@ -19,12 +20,58 @@ enum Move {
     Right,
 }
 
-type NodeRef = Rc<Node>;
+type NodeRef = Rc<RefCell<Node>>;
+
+impl fmt::Debug for Node {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Node\n  val: {}\n  coord: {:?}\n  {}\n",
+            self.val,
+            self.coord,
+            self.neighbors.iter().all(|x| x.is_some())
+        )
+    }
+}
 
 #[derive(Debug, Clone)]
 struct Walker {
-    position: Rc<Node>,
-    facing: Coord,
+    position: NodeRef,
+    facing: usize,
+}
+
+impl Walker {
+    fn step(&mut self, action: &Move) {
+        match action {
+            Move::Forward(n) => {
+                for _i in 0..*n {
+                    let pos = Rc::clone(&self.position);
+                    let tmp = pos.borrow().neighbors[self.facing].clone();
+                    let r = tmp.unwrap();
+                    let newpos = Rc::clone(&r);
+                    if newpos.borrow().val == '.' {
+                        self.position = newpos;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            Move::Left => {
+                if self.facing == 0 {
+                    self.facing = 3;
+                } else {
+                    self.facing -= 1;
+                }
+            }
+            Move::Right => {
+                if self.facing == 3 {
+                    self.facing = 0;
+                } else {
+                    self.facing += 1;
+                }
+            }
+        }
+    }
 }
 
 fn connect_part_one(lines: &Vec<&str>) -> NodeRef {
@@ -34,16 +81,18 @@ fn connect_part_one(lines: &Vec<&str>) -> NodeRef {
     let cols = lines[0].len();
 
     let mut map: Vec<NodeRef> = vec![];
+    map.reserve(rows * cols);
 
     for r in 0..rows {
         for c in 0..cols {
             let bt = lines[r].as_bytes().get(c).unwrap_or(&(' ' as u8));
-            let n = Rc::new(Node {
-                val: *bt as char,
+            let val = *bt as char;
+            let n = Rc::new(RefCell::new(Node {
+                val: val,
                 coord: Coord::new(c as Int, r as Int),
-                neighbors: vec![],
-            });
-            if root.is_none() {
+                neighbors: [None, None, None, None],
+            }));
+            if root.is_none() && val == '.' {
                 root = Some(Rc::clone(&n));
             }
 
@@ -51,17 +100,51 @@ fn connect_part_one(lines: &Vec<&str>) -> NodeRef {
         }
     }
 
-    println!("{:?}", map);
+    let neighbors = [
+        Coord::new(1, 0),
+        Coord::new(0, 1),
+        Coord::new(-1, 0),
+        Coord::new(0, -1),
+    ];
+
+    for n in map.iter() {
+        let mut i = 0;
+        for offset in neighbors {
+            let mut c = n.borrow().coord;
+            loop {
+                c += offset;
+                if c.x >= (cols as Int) {
+                    c.x = 0
+                }
+                if c.x < 0 {
+                    c.x = (cols - 1) as Int;
+                }
+                if c.y >= (rows as Int) {
+                    c.y = 0
+                }
+                if c.y < 0 {
+                    c.y = (rows - 1) as Int;
+                }
+                let neighbor_node = Rc::clone(&map[(c.y * cols as Int + c.x) as usize]);
+                if neighbor_node.borrow().val != ' ' {
+                    n.borrow_mut().neighbors[i] = Some(Rc::clone(&neighbor_node));
+                    break;
+                }
+            }
+            i += 1;
+        }
+    }
+
     root.unwrap()
 }
 
-fn parse_input(input: &str) -> (Node, Vec<Move>) {
+fn parse_input(input: &str) -> (NodeRef, Vec<Move>) {
     let mut parts = input.split("\n\n");
     let map = parts.next().unwrap();
-    let sequence = parts.next().unwrap();
+    let sequence = parts.next().unwrap().trim();
 
     let lines = Vec::from_iter(map.lines());
-    connect_part_one(&lines);
+    let start = connect_part_one(&lines);
 
     let mut moves = vec![];
     let mut current = 0;
@@ -92,21 +175,28 @@ fn parse_input(input: &str) -> (Node, Vec<Move>) {
             }
         }
     }
-    let n = Node {
-        val: 'K',
-        coord: Coord::new(0, 0),
-        neighbors: Vec::new(),
-    };
-    (n, moves)
+    (start, moves)
 }
 
 fn part_one(input: &str) -> Option<i32> {
-    let (map, moves) = parse_input(input);
-    Some(3)
+    let (start, moves) = parse_input(input);
+
+    let mut w = Walker {
+        position: start,
+        facing: 0,
+    };
+
+    for m in moves.iter() {
+        w.step(m);
+    }
+
+    let final_pos = w.position.borrow().coord;
+
+    Some((final_pos.y + 1) * 1000 + (final_pos.x + 1) * 4 + w.facing as Int)
 }
 
 fn part_two(input: &str) -> Option<i32> {
-    let (map, moves) = parse_input(input);
+    // let (map, moves) = parse_input(input);
     None
 }
 
