@@ -39,7 +39,7 @@ fn part_one(input: &str) -> Option<usize> {
         },
         |n| grid[n.y as usize][n.x as usize] == 'S',
     );
-    Some(res.unwrap().len())
+    Some(res.unwrap().len() - 1)
 }
 
 fn part_two(input: &str) -> Option<usize> {
@@ -81,7 +81,7 @@ fn part_two(input: &str) -> Option<usize> {
         },
         |n| grid[n.y as usize][n.x as usize] == 'a' || grid[n.y as usize][n.x as usize] == 'S',
     );
-    Some(res.unwrap().len())
+    Some(res.unwrap().len() - 1)
 }
 
 fn main() {
