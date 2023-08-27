@@ -271,52 +271,64 @@ impl<T: Ord + PartialOrd + std::marker::Copy> PartialOrd for Coordinate3D<T> {
 
 #[cfg(test)]
 mod tests {
-    // use crate::helpers::Coordinate3D::Coordinate3D;
+    use crate::helpers::coordinate3d::Coordinate3D;
 
-    // #[test]
-    // fn test_add() {
-    //     assert_eq!(
-    //         Coordinate3D::new(23, 2) + Coordinate3D::new(2, -6),
-    //         Coordinate3D::new(25, -4)
-    //     );
-    // }
+    #[test]
+    fn test_add() {
+        assert_eq!(
+            Coordinate3D::new(23, 2, -3) + Coordinate3D::new(2, -6, 4),
+            Coordinate3D::new(25, -4, 1)
+        );
+    }
 
-    // #[test]
-    // fn test_add_assign() {
-    //     let mut c = Coordinate3D::new(12, 32);
-    //     c += Coordinate3D::new(3, 10);
-    //     assert_eq!(c, Coordinate3D::new(15, 42));
-    // }
+    #[test]
+    fn test_add_assign() {
+        let mut c = Coordinate3D::new(12, 32, 4);
+        c += Coordinate3D::new(3, 10, 0);
+        assert_eq!(c, Coordinate3D::new(15, 42, 4));
+    }
 
-    // #[test]
-    // fn test_sub() {
-    //     assert_eq!(
-    //         Coordinate3D::new(12, 2) - Coordinate3D::new(12, 3),
-    //         Coordinate3D::new(0, -1)
-    //     );
-    // }
+    #[test]
+    fn test_sub() {
+        assert_eq!(
+            Coordinate3D::new(12, 2, 5) - Coordinate3D::new(12, 3, 6),
+            Coordinate3D::new(0, -1, -1)
+        );
+    }
 
-    // #[test]
-    // fn test_sub_assign() {
-    //     let mut c = Coordinate3D::new(12, 32);
-    //     c -= Coordinate3D::new(3, 10);
-    //     assert_eq!(c, Coordinate3D::new(9, 22));
-    // }
+    #[test]
+    fn test_sub_assign() {
+        let mut c = Coordinate3D::new(12, 32, 3);
+        c -= Coordinate3D::new(3, 10, 3);
+        assert_eq!(c, Coordinate3D::new(9, 22, 0));
+    }
 
-    // #[test]
-    // fn test_ord() {
-    //     assert_eq!(Coordinate3D::new(4, 3) < Coordinate3D::new(3, 4), true);
-    //     assert_eq!(Coordinate3D::new(3, 4) == Coordinate3D::new(3, 4), true);
-    //     assert_eq!(Coordinate3D::new(4, 3) > Coordinate3D::new(2, 1), true);
-    //     assert_eq!(Coordinate3D::new(3, 4) < Coordinate3D::new(2, 1), false);
-    // }
+    #[test]
+    fn test_ord() {
+        assert_eq!(
+            Coordinate3D::new(4, 3, 5) < Coordinate3D::new(3, 4, 2),
+            true
+        );
+        assert_eq!(
+            Coordinate3D::new(3, 4, 6) == Coordinate3D::new(3, 4, 6),
+            true
+        );
+        assert_eq!(
+            Coordinate3D::new(4, 3, 3) > Coordinate3D::new(2, 1, 3),
+            true
+        );
+        assert_eq!(
+            Coordinate3D::new(3, 4, 8) < Coordinate3D::new(2, 1, 2),
+            false
+        );
+    }
 
-    // #[test]
-    // fn test_manhattan() {
-    //     let a = Coordinate3D::new(4, 3);
-    //     let b = Coordinate3D::new(3, 4);
-    //     assert_eq!(a.manhattan(&b), 2);
-    //     assert_eq!(b.manhattan(&a), 2);
-    //     assert_eq!(b.manhattan(&b), 0);
-    // }
+    #[test]
+    fn test_manhattan() {
+        let a = Coordinate3D::new(4, 3, 2);
+        let b = Coordinate3D::new(3, 4, 4);
+        assert_eq!(a.manhattan(&b), 4);
+        assert_eq!(b.manhattan(&a), 4);
+        assert_eq!(b.manhattan(&b), 0);
+    }
 }
