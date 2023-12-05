@@ -56,7 +56,6 @@ fn get_number2(s: &str) -> i32 {
         }
     }
 
-    print!("{}, {}\n", first_val, last_val);
     (first_val * 10 + last_val) as i32
 }
 
