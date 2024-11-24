@@ -127,7 +127,7 @@ fn part_one(input: &str) -> Option<Int> {
     Some(sum)
 }
 
-fn part_two(input: &str) -> Option<String> {
+fn part_two(_input: &str) -> Option<String> {
     None
 }
 

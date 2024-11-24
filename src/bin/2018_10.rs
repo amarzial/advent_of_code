@@ -30,7 +30,7 @@ fn parse_point(line: &str) -> Point {
 }
 
 fn cycle(points: &mut Vec<Point>) {
-    for mut p in points {
+    for p in points {
         p.position.0 += p.velocity.0;
         p.position.1 += p.velocity.1;
     }
