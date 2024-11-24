@@ -12,3 +12,6 @@ num = "0.4.0"
 pathfinding = "4"
 json = "0"
 itertools = "0.10.5"
+
+[profile.release]
+debug = 1
