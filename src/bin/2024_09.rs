@@ -49,26 +49,6 @@ fn part_one(input: &str) -> Option<usize> {
     Some(total)
 }
 
-fn next_free(mem: &[i32], mut start: usize) -> (usize, usize) {
-    while start < (mem.len() - 1) && mem[start] != -1 {
-        start += 1;
-    }
-
-    if start >= mem.len() {
-        return (0, 0);
-    }
-
-    if mem[start] == -1 {
-        let c = mem[start];
-        let mut cursor = 0;
-        while (start + cursor < mem.len()) && (mem[start + cursor] == c) {
-            cursor += 1;
-        }
-        return (start, cursor);
-    }
-    (0, 0)
-}
-
 fn next_chunk(mem: &[i32], mut start: usize) -> (usize, usize) {
     while start > 0 && mem[start] == -1 {
         start -= 1;
@@ -85,23 +65,55 @@ fn next_chunk(mem: &[i32], mut start: usize) -> (usize, usize) {
     (0, 0)
 }
 
+fn find_free_spaces(mem: &[i32]) -> Vec<(usize, usize)> {
+    let mut spaces = vec![];
+
+    let mut count = 0;
+    for c in mem.iter().enumerate() {
+        if *c.1 != -1 {
+            if count > 0 || c.0 == (mem.len() - 1) {
+                spaces.push((c.0 - count, count));
+            }
+            count = 0;
+        } else {
+            count += 1;
+        }
+    }
+    spaces
+}
+
+fn _print_mem(mem: &[i32]) {
+    for n in mem {
+        if *n == -1 {
+            print!(".");
+        } else {
+            print!("{}", n)
+        }
+    }
+    println!();
+}
+
 fn part_two(input: &str) -> Option<usize> {
     let mut mem = parse_input(input);
     let mut rstart = mem.len() - 1;
 
+    let mut free_spaces = find_free_spaces(&mem);
+
     loop {
         let rnext = next_chunk(&mem, rstart);
-        let mut lnext = next_free(&mem, 0);
+        let found_free = free_spaces.iter().position(|e| e.1 >= rnext.1);
 
         if rnext.1 == 0 {
             break;
         }
 
-        while lnext.1 > 0 && lnext.0 < mem.len() && lnext.1 < rnext.1 {
-            lnext = next_free(&mem, lnext.0 + lnext.1);
+        if found_free.is_none() {
+            rstart = rnext.0 - 1;
+            continue;
         }
+        let lnext = free_spaces[found_free.unwrap()];
 
-        if lnext.1 == 0 || lnext.0 >= rnext.0 {
+        if lnext.0 >= rnext.0 {
             rstart = rnext.0 - 1;
             continue;
         }
@@ -109,6 +121,13 @@ fn part_two(input: &str) -> Option<usize> {
         for i in 0..rnext.1 {
             mem.swap(rnext.0 + i, lnext.0 + i);
         }
+
+        if lnext.1 > rnext.1 {
+            free_spaces[found_free.unwrap()] = (lnext.0 + rnext.1, lnext.1 - rnext.1);
+        } else {
+            free_spaces.remove(found_free.unwrap());
+        }
+
         rstart = rnext.0 - 1;
     }
 
